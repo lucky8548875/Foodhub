@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Foodhub</string>
+    <string name="title_activity_dashboard">Dashboard</string>
+    <string name="title_shop">Shop</string>
+    <string name="title_menu">Menu</string>
+    <string name="title_transactions">Transactions</string>
+    <string name="title_profile">Profile</string>
 </resources>

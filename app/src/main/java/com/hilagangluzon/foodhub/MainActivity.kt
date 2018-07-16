@@ -1,7 +1,9 @@
 package com.hilagangluzon.foodhub
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 
 class MainActivity : AppCompatActivity() {
 
@@ -9,10 +11,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        
+
+        val actionBar = supportActionBar
+        actionBar!!.hide()
 
 
+        Handler().postDelayed({
 
-        print("hello")
+            startActivity(Intent(this,Dashboard::class.java))
+
+        }, 1000)
     }
 }
