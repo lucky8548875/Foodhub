@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "136989953031",
+    "firebase_url": "https://foodhub-b2314.firebaseio.com",
+    "project_id": "foodhub-b2314",
+    "storage_bucket": "foodhub-b2314.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:136989953031:android:7a014e3c8ffdf2f9",
+        "android_client_info": {
+          "package_name": "com.hilagangluzon.foodhub"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "136989953031-fdt2e6hmg1j0p770264249km4ftn21hi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hilagangluzon.foodhub",
+            "certificate_hash": "b50b245d51573dd103b812a8e20f44469f3a0e40"
+          }
+        },
+        {
+          "client_id": "136989953031-plbtm7lrjomf3cnr5ghldluup4ncru3u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB0CFaKbgfZ3PFuS9cmSyg7jE6RcsGqBR0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "136989953031-plbtm7lrjomf3cnr5ghldluup4ncru3u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
