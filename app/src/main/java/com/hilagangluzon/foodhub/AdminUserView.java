@@ -37,7 +37,7 @@ public class AdminUserView extends AppCompatActivity implements OnSuccessListene
         fs = new FirestoreTools(db);
 
         fromPrev = getIntent().getExtras();
-        collection = fromPrev.containsKey("collection") ? fromPrev.getString("collection") : "none";
+        collection = fromPrev.containsKey("collection") ? fromPrev.getString("collection") : "users";
         id = fromPrev.containsKey("id") ? fromPrev.getString("id") : "nvm";
         
         txfUser = findViewById(R.id.txfUser);
@@ -161,7 +161,7 @@ public class AdminUserView extends AppCompatActivity implements OnSuccessListene
                     public void onClick(DialogInterface dialog, int which)
                     {
                         fs.delete(collection, id);
-                        finish();
+                        goBack();
                     }
 
                 })
@@ -174,8 +174,18 @@ public class AdminUserView extends AppCompatActivity implements OnSuccessListene
                     }
                 })
                 .show();
-        goBack();
     }
+
+    /*public void seeOrders(View v)
+    {
+        Intent toOrders = new Intent(this, OrderHistory.class);
+        Bundle stuff = new Bundle();
+        stuff.putString("collection", collection);
+        stuff.putString("id", id);
+        toOrders.putExtras(stuff);
+        startActivity(toOrders);
+        finish();
+    }*/
 
     @Override
     public void onSuccess(DocumentSnapshot documentSnapshot) {

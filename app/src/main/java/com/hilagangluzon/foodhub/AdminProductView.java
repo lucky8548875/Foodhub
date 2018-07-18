@@ -7,8 +7,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.KeyListener;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -30,6 +33,10 @@ public class AdminProductView extends AppCompatActivity implements OnSuccessList
     EditText txfName, txfDesc, txfPrice, txfInst;
     Button btnAdd, btnEdit, btnDelete;
 
+    Spinner spnCateg;
+    String[] categories;
+    ArrayAdapter adpCateg;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +46,7 @@ public class AdminProductView extends AppCompatActivity implements OnSuccessList
         fs = new FirestoreTools(db);
 
         fromPrev = getIntent().getExtras();
-        collection = fromPrev.containsKey("collection") ? fromPrev.getString("collection") : "none";
+        collection = fromPrev.containsKey("collection") ? fromPrev.getString("collection") : "products";
         id = fromPrev.containsKey("id") ? fromPrev.getString("id") : "nvm";
 
         txfName = findViewById(R.id.txfName);
@@ -50,6 +57,14 @@ public class AdminProductView extends AppCompatActivity implements OnSuccessList
         btnAdd = findViewById(R.id.btnAdd);
         btnEdit = findViewById(R.id.btnEdit);
         btnDelete = findViewById(R.id.btnDelete);
+
+        spnCateg = findViewById(R.id.spnCateg);
+        categories = new String[]
+                {
+                        "Frappe", "Hot Coffee", "Cold Drink", "Sandwich", "Bottled Drink", "Etc"
+                };
+        adpCateg = new ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, categories);
+        spnCateg.setAdapter(adpCateg);
 
         if(id.equals("nvm"))
         {
@@ -66,6 +81,10 @@ public class AdminProductView extends AppCompatActivity implements OnSuccessList
             txfInst.setKeyListener(null);
 
             btnAdd.setVisibility(View.GONE);
+
+            spnCateg.setEnabled(false);
+            spnCateg.setClickable(false);
+
             fs.select(collection, id).addOnSuccessListener(this);
         }
     }
@@ -77,6 +96,7 @@ public class AdminProductView extends AppCompatActivity implements OnSuccessList
         p.setDescription(txfDesc.getText().toString());
         p.setPrice(Double.valueOf(txfPrice.getText().toString()));
         p.setIn_stock(Integer.valueOf(txfInst.getText().toString()));
+        p.setCategory(spnCateg.getSelectedItem().toString());
         fs.insert(collection, p);
 
         txfName.setText("");
@@ -94,6 +114,9 @@ public class AdminProductView extends AppCompatActivity implements OnSuccessList
             txfDesc.setKeyListener(edtKeyL);
             txfPrice.setKeyListener(edtKeyL);
             txfInst.setKeyListener(edtKeyL);
+
+            spnCateg.setEnabled(true);
+            spnCateg.setClickable(true);
 
             btnEdit.setText("Save");
         }
@@ -116,6 +139,7 @@ public class AdminProductView extends AppCompatActivity implements OnSuccessList
                             p.setDescription(txfDesc.getText().toString());
                             p.setPrice(Double.valueOf(txfPrice.getText().toString()));
                             p.setIn_stock(Integer.valueOf(txfInst.getText().toString()));
+                            p.setCategory(spnCateg.getSelectedItem().toString());
                             fs.update(collection, id, p);
 
                             txfName.setKeyListener(null);
@@ -124,6 +148,9 @@ public class AdminProductView extends AppCompatActivity implements OnSuccessList
                             txfInst.setKeyListener(null);
 
                             btnEdit.setText("Edit");
+
+                            spnCateg.setEnabled(false);
+                            spnCateg.setClickable(false);
                         }
 
                     })
@@ -152,7 +179,7 @@ public class AdminProductView extends AppCompatActivity implements OnSuccessList
                     public void onClick(DialogInterface dialog, int which)
                     {
                         fs.delete(collection, id);
-                        finish();
+                        goBack();
                     }
 
                 })
@@ -165,7 +192,6 @@ public class AdminProductView extends AppCompatActivity implements OnSuccessList
                     }
                 })
                 .show();
-        goBack();
     }
     
     @Override
@@ -174,6 +200,7 @@ public class AdminProductView extends AppCompatActivity implements OnSuccessList
         txfDesc.setText(String.valueOf(documentSnapshot.get("description")));
         txfPrice.setText(String.valueOf(documentSnapshot.get("price")));
         txfInst.setText(String.valueOf(documentSnapshot.get("in_stock")));
+        spnCateg.setSelection(adpCateg.getPosition(documentSnapshot.get("category")));
     }
 
     @Override

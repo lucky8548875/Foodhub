@@ -44,26 +44,9 @@ public class User extends Object
 
     }
 
-    public User(String username, String password, String first_name, String middle_name, String last_name, String address,
-                    String city, String province, String zip, String email, String tel_no, String cel_no)
-    {
-        this.setUsername(username);
-        this.setPassword(password);
-        this.setFirst_name(first_name);
-        this.setMiddle_name(middle_name);
-        this.setLast_name(last_name);
-        /*this.setAddress(address);
-        this.setCity(city);
-        this.setProvince(province);
-        this.setZip(zip);
-        this.setEmail(email);
-        this.setTel_no(tel_no);
-        this.setCel_no(cel_no);*/
-    }
-
     @Override
     public String toString() {
-        return this.username + " @" + this.email;
+        return this.username + "\n" + this.email;
     }
 
     /*public String getId() {

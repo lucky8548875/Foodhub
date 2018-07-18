@@ -28,7 +28,8 @@
             android:name=".DocumentSelectActivity"
             android:label="Doc" />
         <activity android:name=".AdminProductView" />
-        <activity android:name=".AdminUserView"></activity>
+        <activity android:name=".AdminUserView" />
+        <activity android:name=".AdminOrderView"></activity>
     </application>
 
 </manifest>

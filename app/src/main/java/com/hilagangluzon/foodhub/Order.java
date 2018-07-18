@@ -15,8 +15,9 @@ import java.util.Date;
 @IgnoreExtraProperties
 public class Order extends Object
 {
-    private String id;
+    //private String id;
     private String user_id;
+    private String username;
     private Date order_date;
     private String status;
 
@@ -38,51 +39,19 @@ public class Order extends Object
 
     }
 
-    public Order(String user_id, Date order_date, String status)
-    {
-        this.setUser_id(user_id);
-        this.setOrder_date(order_date);
-        this.setStatus(status);
-    }
-
-    public String acquireUsername()
-    {
-        String username = "";
-
-        /*FirebaseFirestore.getInstance().collection("users").document(getUser_id()).addSnapshotListener(
-                new EventListener<DocumentSnapshot>() {
-                    @Override
-                    public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
-                       documentSnapshot.get("username");
-                    }
-                }
-        );*/
-        FirebaseFirestore.getInstance().collection("users").document(getUser_id()).get().addOnCompleteListener(
-                new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        DocumentSnapshot documentSnapshot = task.getResult();
-                        documentSnapshot.get("username");
-                    }
-                }
-        );
-
-        return username;
-    }
-
     @Override
     public String toString()
     {
-        return acquireUsername() + getOrder_date();
+        return getUsername() + "\n" + getOrder_date();
     }
 
-    public String getId() {
+    /*public String getId() {
         return id;
     }
 
     public void setId(String id) {
         this.id = id;
-    }
+    }*/
 
     public String getUser_id() {
         return user_id;
@@ -106,5 +75,13 @@ public class Order extends Object
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

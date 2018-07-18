@@ -108,4 +108,10 @@ public class HashMapAdapter extends BaseAdapter
         //this.keys = new ArrayList<>();
         this.keys.addAll(map.keySet());
     }
+
+    public void clear()
+    {
+        this.map.clear();
+        this.keys.clear();
+    }
 }

@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="36dp"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="40dp"
         android:text="Description"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,8 +32,8 @@
         android:id="@+id/txfInst"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="32dp"
         android:editable="false"
         android:ems="10"
         android:inputType="number"
@@ -45,10 +45,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="24dp"
         android:editable="false"
         android:ems="10"
-        android:inputType="number"
+        android:inputType="number|numberDecimal"
         app:layout_constraintStart_toEndOf="@+id/textView12"
         app:layout_constraintTop_toBottomOf="@+id/txfDesc" />
 
@@ -56,8 +56,8 @@
         android:id="@+id/txfDesc"
         android:layout_width="202dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="24dp"
         android:editable="false"
         android:ems="10"
         android:inputType="text"
@@ -133,4 +133,24 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="44dp"
+        android:text="Category"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView13" />
+
+    <Spinner
+        android:id="@+id/spnCateg"
+        android:layout_width="193dp"
+        android:layout_height="41dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="28dp"
+        app:layout_constraintStart_toEndOf="@+id/textView11"
+        app:layout_constraintTop_toBottomOf="@+id/txfInst" />
 </android.support.constraint.ConstraintLayout>

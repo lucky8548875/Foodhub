@@ -5,4 +5,12 @@
     <string name="title_menu">Menu</string>
     <string name="title_transactions">Transactions</string>
     <string name="title_profile">Profile</string>
+
+    <!--<string-array name="categories">
+        <item>Frappe</item>
+        <item>Hot Coffee</item>
+        <item>Cold Drink</item>
+        <item>Sandwich</item>
+        <item>Bottled Drink</item>
+    </string-array>-->
 </resources>

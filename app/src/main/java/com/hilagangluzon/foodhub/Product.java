@@ -14,6 +14,8 @@ public class Product extends Object
     private String description;
     private double price;
     private int in_stock;
+    private String category;
+    private int units_sold;
 
     public static final String COLLECTION_NAME = "products";
     public static final String FIELD_NAME = "name";
@@ -29,14 +31,6 @@ public class Product extends Object
     public Product()
     {
 
-    }
-
-    public Product(String name, String description, double price, int in_stock)
-    {
-        this.setName(name);
-        this.setDescription(description);
-        this.setPrice(price);
-        this.setIn_stock(in_stock);
     }
 
     public String getName() {
@@ -82,6 +76,22 @@ public class Product extends Object
     @Override
     public String toString()
     {
-        return this.name + "\t" + this.price;
+        return this.name + "\n" + this.price;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public int getUnits_sold() {
+        return units_sold;
+    }
+
+    public void setUnits_sold(int units_sold) {
+        this.units_sold = units_sold;
     }
 }

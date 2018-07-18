@@ -3,6 +3,7 @@ package com.hilagangluzon.foodhub;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.SimpleAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,7 +31,7 @@ import java.util.EventListener;
 import java.util.HashMap;
 
 public class DocumentSelectActivity extends AppCompatActivity implements OnCompleteListener<QuerySnapshot>
-        /*com.google.firebase.firestore.EventListener<QuerySnapshot>*/, AdapterView.OnItemClickListener
+        /*com.google.firebase.firestore.EventListener<QuerySnapshot>*/, AdapterView.OnItemClickListener, AdapterView.OnItemSelectedListener
 {
 
     FirebaseFirestore db;
@@ -39,14 +41,18 @@ public class DocumentSelectActivity extends AppCompatActivity implements OnCompl
     String collection;
     Class c;
 
-    SearchView srcDocs;
-
     TextView lblColls;
+
+    Spinner spnCateg;
+    String[] categories;
+    ArrayAdapter adpCateg;
 
     ListView lstDocs;
     HashMapAdapter adpDocs;
     //SimpleAdapter adpDocs;
     //ArrayAdapter<Object> adpDocs;
+
+    FloatingActionButton fabAdd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +69,7 @@ public class DocumentSelectActivity extends AppCompatActivity implements OnCompl
         {
             case User.COLLECTION_NAME: c = User.class; break;
             case Product.COLLECTION_NAME: c = Product.class; break;
-            //case Order.COLLECTION_NAME: c = Order.class ; break;
+            case Order.COLLECTION_NAME: c = Order.class ; break;
             //case Message.COLLECTION_NAME: c = Message.class ; break;
             default: c = Object.class; return;
         }
@@ -93,16 +99,39 @@ public class DocumentSelectActivity extends AppCompatActivity implements OnCompl
                 }
         );*/
 
-        srcDocs = findViewById(R.id.srcDocs);
-
         lblColls = findViewById(R.id.lblColls);
         lblColls.setText(collection.toUpperCase());
+
+        spnCateg = findViewById(R.id.spnCateg);
+
+        if(collection.equals("products"))
+        {
+
+            categories = new String[]
+                    {
+                            "All", "Frappe", "Hot Coffee", "Cold Drink", "Sandwich", "Bottled Drink", "Etc"
+                    };
+            adpCateg = new ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, categories);
+            spnCateg.setAdapter(adpCateg);
+            spnCateg.setOnItemSelectedListener(this);
+        }
+        else
+        {
+            spnCateg.setVisibility(View.GONE);
+        }
 
         lstDocs = findViewById(R.id.lstDocs);
         adpDocs = new HashMapAdapter(this, android.R.layout.simple_list_item_1);
         lstDocs.setAdapter(adpDocs);
         lstDocs.setOnItemClickListener(this);
-        //experimental
+
+        fabAdd = findViewById(R.id.fabAdd);
+
+        if(collection.equals("orders"))
+        {
+            fabAdd.setVisibility(View.GONE);
+        }
+
         fs.selectAll(collection).addOnCompleteListener(this);
         //fs.referToCollection(collection).addSnapshotListener(this);
     }
@@ -185,7 +214,13 @@ public class DocumentSelectActivity extends AppCompatActivity implements OnCompl
                 stuff.putString("collection", collection);
                 stuff.putString("id", view.findViewById(android.R.id.text1).getTag()+"");
                 break;
-            //case Order.COLLECTION_NAME: toAdminOrderView(); break;
+            case Order.COLLECTION_NAME:
+                toSomewhere = new Intent(this, AdminOrderView.class);
+                stuff.putString("collection", collection);
+                stuff.putString("id", view.findViewById(android.R.id.text1).getTag()+"");
+                //stuff.putString("username",((Order) adpDocs.getItem(i)).getUsername()); //EXP
+                //Log.d("username", ((Order) adpDocs.getItem(i)).getUsername());
+                break;
             //case Message.COLLECTION_NAME: toAdminMessageView(); break;
             default: return;
         }
@@ -245,5 +280,23 @@ public class DocumentSelectActivity extends AppCompatActivity implements OnCompl
         toSomewhere.putExtras(stuff);
         startActivity(toSomewhere);
         finish();
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        adpDocs.clear();
+        if(i == 0)
+        {
+            fs.selectAll(collection).addOnCompleteListener(this);
+        }
+        else
+        {
+            fs.select(collection, "category", "=", categories[i]).addOnCompleteListener(this);
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
 }

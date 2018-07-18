@@ -38,6 +38,18 @@ public class FirestoreTools
         return db.collection(from).document(key).get();
     }
 
+    public Task<QuerySnapshot> select(String from, String where, String operator, String value)
+    {
+        Query task = db.collection(from);
+        switch(operator)
+        {
+            case "=":
+                task = task.whereEqualTo(where, value);
+                break;
+        }
+        return task.get();
+    }
+
     /*public Task<DocumentSnapshot> select(DocumentReference docRef)
     {
         return db.document(docRef.getPath()).get();
