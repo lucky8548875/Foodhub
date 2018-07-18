@@ -25,8 +25,8 @@ public class CollectionSelectActivity extends AppCompatActivity implements Adapt
         collections = new String[]
                 {
                         User.COLLECTION_NAME.toUpperCase(),
-                        Product.COLLECTION_NAME.toUpperCase(),
-                        Order.COLLECTION_NAME.toUpperCase(),
+                        Product.COLLECTION_NAME.toUpperCase()//,
+                        //Order.COLLECTION_NAME.toUpperCase()//,
                         //Message.COLLECTION_NAME.toUpperCase()
                 };
         adpColls = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, collections);
@@ -42,16 +42,10 @@ public class CollectionSelectActivity extends AppCompatActivity implements Adapt
         {
             case 0: toNext.putExtra("collection", User.COLLECTION_NAME); break;
             case 1: toNext.putExtra("collection", Product.COLLECTION_NAME); break;
-            case 2: toNext.putExtra("collection", Order.COLLECTION_NAME); break;
+            //case 2: toNext.putExtra("collection", Order.COLLECTION_NAME); break;
             //case 3: toNext.putExtra("collection", Message.COLLECTION_NAME); break;
             default: break;
         }
         startActivity(toNext);
-    }
-
-    @Override
-    public void onPointerCaptureChanged(boolean hasCapture)
-    {
-
     }
 }

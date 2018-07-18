@@ -9,7 +9,7 @@ import java.util.Map;
 @IgnoreExtraProperties
 public class Product extends Object
 {
-    private String id;
+    //private String id;
     private String name;
     private String description;
     private double price;
@@ -71,17 +71,17 @@ public class Product extends Object
         this.in_stock = in_stock;
     }
 
-    public String getId() {
+    /*public String getId() {
         return id;
     }
 
     public void setId(String id) {
         this.id = id;
-    }
+    }*/
 
     @Override
     public String toString()
     {
-        return this.name;
+        return this.name + "\t" + this.price;
     }
 }

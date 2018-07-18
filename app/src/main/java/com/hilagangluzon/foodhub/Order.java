@@ -1,13 +1,23 @@
 package com.hilagangluzon.foodhub;
 
+import android.support.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.IgnoreExtraProperties;
+
+import java.util.Date;
 
 @IgnoreExtraProperties
 public class Order extends Object
 {
     private String id;
     private String user_id;
-    private String order_date;
+    private Date order_date;
     private String status;
 
 
@@ -23,27 +33,47 @@ public class Order extends Object
                     FIELD_ID, FIELD_CUSTOMER_ID, FIELD_ORDER_DATE, FIELD_STATUS
             };
 
-    public Order(String user_id, String order_date, String status)
+    public Order()
     {
-        this.setUserId(user_id);
-        this.setOrderDate(order_date);
+
+    }
+
+    public Order(String user_id, Date order_date, String status)
+    {
+        this.setUser_id(user_id);
+        this.setOrder_date(order_date);
         this.setStatus(status);
     }
 
-    public String getOrderDate() {
-        return order_date;
+    public String acquireUsername()
+    {
+        String username = "";
+
+        /*FirebaseFirestore.getInstance().collection("users").document(getUser_id()).addSnapshotListener(
+                new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
+                       documentSnapshot.get("username");
+                    }
+                }
+        );*/
+        FirebaseFirestore.getInstance().collection("users").document(getUser_id()).get().addOnCompleteListener(
+                new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        DocumentSnapshot documentSnapshot = task.getResult();
+                        documentSnapshot.get("username");
+                    }
+                }
+        );
+
+        return username;
     }
 
-    public void setOrderDate(String order_date) {
-        this.order_date = order_date;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
+    @Override
+    public String toString()
+    {
+        return acquireUsername() + getOrder_date();
     }
 
     public String getId() {
@@ -54,17 +84,27 @@ public class Order extends Object
         this.id = id;
     }
 
-    public String getUserId() {
+    public String getUser_id() {
         return user_id;
     }
 
-    public void setUserId(String user_id) {
+    public void setUser_id(String user_id) {
         this.user_id = user_id;
     }
 
-    @Override
-    public String toString()
-    {
-        return getOrderDate();
+    public Date getOrder_date() {
+        return order_date;
+    }
+
+    public void setOrder_date(Date order_date) {
+        this.order_date = order_date;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

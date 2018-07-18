@@ -88,6 +88,18 @@ public class HashMapAdapter extends BaseAdapter
         this.keys.addAll(map.keySet());
     }
 
+    public void set(String key, Object value)
+    {
+        if(map.containsKey(key))
+        {
+            //this.keys.add(key);
+            this.map.put(key, value);
+            this.keys.clear();
+            //this.keys = new ArrayList<>();
+            this.keys.addAll(map.keySet());
+        }
+    }
+
     public void remove(String key)
     {
         //this.keys.remove(key);

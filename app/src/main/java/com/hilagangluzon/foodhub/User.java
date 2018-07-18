@@ -5,19 +5,19 @@ import com.google.firebase.firestore.IgnoreExtraProperties;
 @IgnoreExtraProperties
 public class User extends Object
 {
-    private String id;
+    //private String id;
     private String username;
     private String password;
     private String first_name;
     private String middle_name;
     private String last_name;
-    private String address;
+    /*private String address;
     private String city;
     private String province;
-    private String zip;
+    private String zip;*/
     private String email;
-    private String tel_no;
-    private String cel_no;
+    /*private String tel_no;
+    private String cel_no;*/
 
     public static final String COLLECTION_NAME = "users";
     public static final String FIELD_USERNAME = "username";
@@ -25,36 +25,54 @@ public class User extends Object
     public static final String FIELD_FNAME = "first_name";
     public static final String FIELD_MNAME = "middle_name";
     public static final String FIELD_LNAME = "last_name";
-    public static final String FIELD_ADDRESS = "address";
+    /*public static final String FIELD_ADDRESS = "address";
     public static final String FIELD_CITY = "city";
     public static final String FIELD_PROVINCE = "province";
-    public static final String FIELD_ZIP = "zip";
+    public static final String FIELD_ZIP = "zip";*/
     public static final String FIELD_EMAIL = "email";
-    public static final String FIELD_TEL_NO = "tel_no";
-    public static final String FIELD_CEL_NO = "cel_no";
+    /*public static final String FIELD_TEL_NO = "tel_no";
+    public static final String FIELD_CEL_NO = "cel_no";*/
     
     public static final String[] FIELDS = new String[]
             {
-                    FIELD_USERNAME, FIELD_PASSWORD, FIELD_FNAME, FIELD_MNAME, FIELD_LNAME, FIELD_ADDRESS,
-                    FIELD_CITY, FIELD_PROVINCE, FIELD_ZIP, FIELD_EMAIL, FIELD_TEL_NO, FIELD_CEL_NO
+                    FIELD_USERNAME, FIELD_PASSWORD, FIELD_FNAME, FIELD_MNAME, FIELD_LNAME, /*FIELD_ADDRESS,
+                    FIELD_CITY, FIELD_PROVINCE, FIELD_ZIP,*/ FIELD_EMAIL/*, FIELD_TEL_NO, FIELD_CEL_NO*/
             };
+
+    public User()
+    {
+
+    }
 
     public User(String username, String password, String first_name, String middle_name, String last_name, String address,
                     String city, String province, String zip, String email, String tel_no, String cel_no)
     {
-        this.username = username;
-        this.password = password;
-        this.first_name = first_name;
-        this.middle_name = middle_name;
-        this.last_name = last_name;
-        this.address = address;
-        this.city = city;
-        this.province = province;
-        this.zip = zip;
-        this.email = email;
-        this.tel_no = tel_no;
-        this.cel_no = cel_no;
+        this.setUsername(username);
+        this.setPassword(password);
+        this.setFirst_name(first_name);
+        this.setMiddle_name(middle_name);
+        this.setLast_name(last_name);
+        /*this.setAddress(address);
+        this.setCity(city);
+        this.setProvince(province);
+        this.setZip(zip);
+        this.setEmail(email);
+        this.setTel_no(tel_no);
+        this.setCel_no(cel_no);*/
     }
+
+    @Override
+    public String toString() {
+        return this.username + " @" + this.email;
+    }
+
+    /*public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }*/
 
     public String getUsername() {
         return username;
@@ -72,60 +90,36 @@ public class User extends Object
         this.password = password;
     }
 
-    public String getFirstName() {
+    public String getFirst_name() {
         return first_name;
     }
 
-    public void setFirstName(String first_name) {
+    public void setFirst_name(String first_name) {
         this.first_name = first_name;
     }
 
-    public String getMiddleName() {
+    public String getMiddle_name() {
         return middle_name;
     }
 
-    public void setMiddleName(String middle_name) {
+    public void setMiddle_name(String middle_name) {
         this.middle_name = middle_name;
     }
 
-    public String getLastName() {
+    public String getLast_name() {
         return last_name;
     }
 
-    public void setLastName(String last_name) {
+    public void setLast_name(String last_name) {
         this.last_name = last_name;
     }
 
-    public String getAddress() {
+    /*public String getAddress() {
         return address;
     }
 
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getTelephoneNumber() {
-        return tel_no;
-    }
-
-    public void setTelephoneNumber(String tel_no) {
-        this.tel_no = tel_no;
-    }
-
-    public String getCellphoneNumber() {
-        return cel_no;
-    }
-
-    public void setCellphoneNumber(String cel_no) {
-        this.cel_no = cel_no;
     }
 
     public String getCity() {
@@ -144,34 +138,35 @@ public class User extends Object
         this.province = province;
     }
 
-    public String getZIP() {
+    public String getZip() {
         return zip;
     }
 
-    public void setZIP(String zip) {
+    public void setZip(String zip) {
         this.zip = zip;
+    }*/
+
+    public String getEmail() {
+        return email;
     }
 
-    public String getId() {
-        return id;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    /*public String getTel_no() {
+        return tel_no;
     }
 
-    public String getMiddleInitial()
-    {
-        return getMiddleName().charAt(0) + ".";
+    public void setTel_no(String tel_no) {
+        this.tel_no = tel_no;
     }
 
-    public String getFullName()
-    {
-        return getFirstName() + " " + getMiddleInitial() + " " + getLastName();
+    public String getCel_no() {
+        return cel_no;
     }
 
-    @Override
-    public String toString() {
-        return getFullName() + " @" + getUsername();
-    }
+    public void setCel_no(String cel_no) {
+        this.cel_no = cel_no;
+    }*/
 }

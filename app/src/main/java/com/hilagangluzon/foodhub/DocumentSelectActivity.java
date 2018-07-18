@@ -1,9 +1,11 @@
 package com.hilagangluzon.foodhub;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -16,6 +18,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -25,8 +28,8 @@ import java.util.ArrayList;
 import java.util.EventListener;
 import java.util.HashMap;
 
-public class DocumentSelectActivity extends AppCompatActivity implements /*OnCompleteListener<QuerySnapshot>*/
-        com.google.firebase.firestore.EventListener<QuerySnapshot>, AdapterView.OnItemClickListener
+public class DocumentSelectActivity extends AppCompatActivity implements OnCompleteListener<QuerySnapshot>
+        /*com.google.firebase.firestore.EventListener<QuerySnapshot>*/, AdapterView.OnItemClickListener
 {
 
     FirebaseFirestore db;
@@ -34,6 +37,7 @@ public class DocumentSelectActivity extends AppCompatActivity implements /*OnCom
 
     Bundle fromPrev;
     String collection;
+    Class c;
 
     SearchView srcDocs;
 
@@ -54,20 +58,53 @@ public class DocumentSelectActivity extends AppCompatActivity implements /*OnCom
 
         fromPrev = getIntent().getExtras();
         collection = fromPrev.getString("collection");
-        Toast.makeText(this, collection, Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, collection, Toast.LENGTH_LONG).show();
+        switch(collection)
+        {
+            case User.COLLECTION_NAME: c = User.class; break;
+            case Product.COLLECTION_NAME: c = Product.class; break;
+            //case Order.COLLECTION_NAME: c = Order.class ; break;
+            //case Message.COLLECTION_NAME: c = Message.class ; break;
+            default: c = Object.class; return;
+        }
+
+        /*User u = new User();
+
+        u.setUsername("fakehappy");
+        fs.insert("users", u);*/
+        /*HashMap<String, Object> gotit = new HashMap<>();
+        gotit.put("username", "reallysad");
+        fs.update("users", "AcjxtUhOCiLDZGW250gc", gotit);*/
+        //fs.delete("users", "AcjxtUhOCiLDZGW250gc");
+        /*db.document("/users/OTlZPpoU09JqIx0Q0yDH").get().addOnCompleteListener(
+                new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        Log.d(task.getResult().getId(), task.getResult().get("username").toString() + " " + task.getResult().get("ref").toString());
+                        db.document(((DocumentReference) task.getResult().get("ref")).getPath()).get().addOnCompleteListener(
+                                new OnCompleteListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                        Log.d(task.getResult().getId(), task.getResult().get("name").toString());
+                                    }
+                                }
+                        );
+                    }
+                }
+        );*/
 
         srcDocs = findViewById(R.id.srcDocs);
 
         lblColls = findViewById(R.id.lblColls);
-        lblColls.setText(collection);
+        lblColls.setText(collection.toUpperCase());
 
         lstDocs = findViewById(R.id.lstDocs);
         adpDocs = new HashMapAdapter(this, android.R.layout.simple_list_item_1);
         lstDocs.setAdapter(adpDocs);
         lstDocs.setOnItemClickListener(this);
         //experimental
-        //fs.select(collection).addOnCompleteListener(this);
-        fs.referToCollection(collection).addSnapshotListener(this);
+        fs.selectAll(collection).addOnCompleteListener(this);
+        //fs.referToCollection(collection).addSnapshotListener(this);
     }
 
     /*@Override
@@ -113,69 +150,64 @@ public class DocumentSelectActivity extends AppCompatActivity implements /*OnCom
         adpDocs.notifyDataSetChanged();
     }*/
 
-    /*@Override
-    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-        Class c;
-        switch(collection)
-        {
-            case User.COLLECTION_NAME: c = User.class ; break;
-            case Product.COLLECTION_NAME: c = Product.class ; break;
-            case Order.COLLECTION_NAME: c = Order.class ; break;
-            //case Message.COLLECTION_NAME: c = Message.class ; break;
-            default: return;
-        }
+    @Override
+    public void onComplete(@NonNull Task<QuerySnapshot> task)
+    {
 
-        HashMap<String, Object> records = new HashMap<>();
         for(DocumentSnapshot document: task.getResult())
         {
-            records.put(document.getId(), document.toObject(c));
+            //Log.d("find me", document.getId()+":"+document.toObject(c));
+            adpDocs.add(document.getId(), document.toObject(c));
         }
 
-        adpDocs = new HashMapAdapter(this, android.R.layout.simple_list_item_1, records);
-        lstDocs.setAdapter(adpDocs);
+        //adpDocs = new HashMapAdapter(this, android.R.layout.simple_list_item_1, records);
+        //lstDocs.setAdapter(adpDocs);
 
         //debug
         //Toast.makeText(this, "Something happened!", Toast.LENGTH_LONG).show();
 
         adpDocs.notifyDataSetChanged();
-    }*/
-
-    @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
-
     }
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-        Toast.makeText(this, view.findViewById(android.R.id.text1).getTag()+"", Toast.LENGTH_LONG).show();
-        //Toast.makeText(this, adpDocs.getItemTag(i)+"", Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onEvent(QuerySnapshot snapshots, FirebaseFirestoreException e) {
-        Class c;
+        Intent toSomewhere;
+        Bundle stuff = new Bundle();
         switch(collection)
         {
-            case User.COLLECTION_NAME: c = User.class ; break;
-            case Product.COLLECTION_NAME: c = Product.class ; break;
-            case Order.COLLECTION_NAME: c = Order.class ; break;
-            //case Message.COLLECTION_NAME: c = Message.class ; break;
+            case User.COLLECTION_NAME:
+                toSomewhere = new Intent(this, AdminUserView.class);
+                stuff.putString("collection", collection);
+                stuff.putString("id", view.findViewById(android.R.id.text1).getTag()+"");
+                break;
+            case Product.COLLECTION_NAME:
+                toSomewhere = new Intent(this, AdminProductView.class);
+                stuff.putString("collection", collection);
+                stuff.putString("id", view.findViewById(android.R.id.text1).getTag()+"");
+                break;
+            //case Order.COLLECTION_NAME: toAdminOrderView(); break;
+            //case Message.COLLECTION_NAME: toAdminMessageView(); break;
             default: return;
         }
+        toSomewhere.putExtras(stuff);
+        startActivity(toSomewhere);
+        finish();
+    }
+
+    /*@Override
+    public void onEvent(QuerySnapshot snapshots, FirebaseFirestoreException e) {
 
         //HashMap<String, Object> records = new HashMap<>();
-        for (DocumentChange dc : snapshots.getDocumentChanges())
-        {
-            switch(dc.getType()) {
-                case ADDED:
+        for (DocumentChange dc : snapshots.getDocumentChanges()) {
+            switch (dc.getType()) {
+                *//*case ADDED:
                     adpDocs.add(dc.getDocument().getId(), dc.getDocument().toObject(c));
                     //records.put(dc.getDocument().getId(), dc.getDocument().toObject(c));
-                    break;
-                case MODIFIED:
+                    break;*//*
+                *//*case MODIFIED:
                     adpDocs.add(dc.getDocument().getId(), dc.getDocument().toObject(c));
                     //records.put(dc.getDocument().getId(), dc.getDocument().toObject(c));
-                    break;
+                    break;*//*
                 case REMOVED:
                     adpDocs.remove(dc.getDocument().getId());
                     //records.remove(dc.getDocument().getId());
@@ -190,5 +222,28 @@ public class DocumentSelectActivity extends AppCompatActivity implements /*OnCom
         //Toast.makeText(this, "Something happened!", Toast.LENGTH_LONG).show();
 
         adpDocs.notifyDataSetChanged();
+    }*/
+
+    public void add(View v)
+    {
+        Intent toSomewhere;
+        Bundle stuff = new Bundle();
+        switch(collection)
+        {
+            case User.COLLECTION_NAME:
+                toSomewhere = new Intent(this, AdminUserView.class);
+                stuff.putString("collection", collection);
+                break;
+            case Product.COLLECTION_NAME:
+                toSomewhere = new Intent(this, AdminProductView.class);
+                stuff.putString("collection", collection);
+                break;
+            //case Order.COLLECTION_NAME: toAdminOrderView(); break;
+            //case Message.COLLECTION_NAME: toAdminMessageView(); break;
+            default: return;
+        }
+        toSomewhere.putExtras(stuff);
+        startActivity(toSomewhere);
+        finish();
     }
 }
