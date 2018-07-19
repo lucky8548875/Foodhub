@@ -18,6 +18,7 @@ public class User extends Object
     private String email;
     /*private String tel_no;
     private String cel_no;*/
+    private boolean is_admin;
 
     public static final String COLLECTION_NAME = "users";
     public static final String FIELD_USERNAME = "username";
@@ -135,6 +136,14 @@ public class User extends Object
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public boolean isIs_admin() {
+        return is_admin;
+    }
+
+    public void setIs_admin(boolean is_admin) {
+        this.is_admin = is_admin;
     }
 
     /*public String getTel_no() {

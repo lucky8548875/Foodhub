@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.text.method.KeyListener;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -26,6 +27,7 @@ public class AdminUserView extends AppCompatActivity implements OnSuccessListene
     KeyListener edtKeyL;
 
     EditText txfUser, txfPass, txfFname, txfMname, txfLname, txfEmail;
+    CheckBox chkIsAdmin;
     Button btnAdd, btnEdit, btnDelete;
 
     @Override
@@ -47,6 +49,8 @@ public class AdminUserView extends AppCompatActivity implements OnSuccessListene
         txfLname = findViewById(R.id.txfLname);
         txfEmail = findViewById(R.id.txfEmail);
 
+        chkIsAdmin = findViewById(R.id.chkIsAdmin);
+
         btnAdd = findViewById(R.id.btnAdd);
         btnEdit = findViewById(R.id.btnEdit);
         btnDelete = findViewById(R.id.btnDelete);
@@ -66,6 +70,8 @@ public class AdminUserView extends AppCompatActivity implements OnSuccessListene
             txfMname.setKeyListener(null);
             txfLname.setKeyListener(null);
             txfEmail.setKeyListener(null);
+
+            chkIsAdmin.setClickable(false);
 
             btnAdd.setVisibility(View.GONE);
             fs.select(collection, id).addOnSuccessListener(this);
@@ -103,6 +109,8 @@ public class AdminUserView extends AppCompatActivity implements OnSuccessListene
             txfLname.setKeyListener(edtKeyL);
             txfEmail.setKeyListener(edtKeyL);
 
+            chkIsAdmin.setClickable(true);
+
             btnEdit.setText("Save");
         }
         else if (state.equals("Save"))
@@ -131,6 +139,8 @@ public class AdminUserView extends AppCompatActivity implements OnSuccessListene
                             txfMname.setKeyListener(null);
                             txfLname.setKeyListener(null);
                             txfEmail.setKeyListener(null);
+
+                            chkIsAdmin.setClickable(false);
 
                             btnEdit.setText("Edit");
                         }
@@ -195,6 +205,7 @@ public class AdminUserView extends AppCompatActivity implements OnSuccessListene
         txfMname.setText(String.valueOf(documentSnapshot.get("middle_name")));
         txfLname.setText(String.valueOf(documentSnapshot.get("last_name")));
         txfEmail.setText(String.valueOf(documentSnapshot.get("email")));
+        chkIsAdmin.setChecked(documentSnapshot.getBoolean("is_admin"));
     }
 
     @Override

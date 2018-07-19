@@ -7,11 +7,21 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
+
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
 
 public class CollectionSelectActivity extends AppCompatActivity implements AdapterView.OnItemClickListener
 {
+    FirebaseFirestore db;
+    FirestoreTools fs;
+
+    Bundle fromPrev;
+    String logged_in_user;
+
+    TextView lblTitle;
     ListView lstColls;
     String[] collections;
     ArrayAdapter<String> adpColls;
@@ -20,6 +30,14 @@ public class CollectionSelectActivity extends AppCompatActivity implements Adapt
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_collection_select);
+
+        db = FirebaseFirestore.getInstance();
+        fs = new FirestoreTools(db);
+
+        fromPrev = getIntent().getExtras();
+        //logged_in_user = fromPrev.containsKey("logged_in_user") ? fromPrev.getString("logged_in_user") : "who?";
+
+        lblTitle = findViewById(R.id.lblTitle);
 
         lstColls = findViewById(R.id.lstColls);
         collections = new String[]
@@ -47,5 +65,12 @@ public class CollectionSelectActivity extends AppCompatActivity implements Adapt
             default: break;
         }
         startActivity(toNext);
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        Intent toReturn = new Intent(this, LoginActivity.class);
+        startActivity(toReturn);
     }
 }
