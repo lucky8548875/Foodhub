@@ -20,9 +20,9 @@ public class AdminUserView extends AppCompatActivity implements OnSuccessListene
     FirebaseFirestore db;
     FirestoreTools fs;
 
-    Bundle fromPrev;
-    String collection;
-    String id;
+    //Bundle fromPrev;
+    //String collection;
+    static String id;
 
     KeyListener edtKeyL;
 
@@ -38,9 +38,10 @@ public class AdminUserView extends AppCompatActivity implements OnSuccessListene
         db = FirebaseFirestore.getInstance();
         fs = new FirestoreTools(db);
 
-        fromPrev = getIntent().getExtras();
-        collection = fromPrev.containsKey("collection") ? fromPrev.getString("collection") : "users";
-        id = fromPrev.containsKey("id") ? fromPrev.getString("id") : "nvm";
+        //fromPrev = fromPrev != null ? getIntent().getExtras() : new Bundle();
+        //collection = fromPrev.containsKey("collection") ? fromPrev.getString("collection") : "users";
+        //id = fromPrev.containsKey("id") ? fromPrev.getString("id") : "nvm";
+        //id = getIntent().getExtras().containsKey("id") ? getIntent().getExtras().getString("id") : "nvm";
         
         txfUser = findViewById(R.id.txfUser);
         txfPass = findViewById(R.id.txfPass);
@@ -55,7 +56,8 @@ public class AdminUserView extends AppCompatActivity implements OnSuccessListene
         btnEdit = findViewById(R.id.btnEdit);
         btnDelete = findViewById(R.id.btnDelete);
 
-        if(id.equals("nvm"))
+
+        if(id == null)
         {
             btnEdit.setVisibility(View.GONE);
             btnDelete.setVisibility(View.GONE);
@@ -74,7 +76,7 @@ public class AdminUserView extends AppCompatActivity implements OnSuccessListene
             chkIsAdmin.setClickable(false);
 
             btnAdd.setVisibility(View.GONE);
-            fs.select(collection, id).addOnSuccessListener(this);
+            fs.select(DocumentSelectActivity.collection, id).addOnSuccessListener(this);
         }
     }
     
@@ -87,7 +89,7 @@ public class AdminUserView extends AppCompatActivity implements OnSuccessListene
         u.setMiddle_name(String.valueOf(txfMname.getText()));
         u.setLast_name(String.valueOf(txfLname.getText()));
         u.setEmail(String.valueOf(txfEmail.getText()));
-        fs.insert(collection, u);
+        fs.insert(DocumentSelectActivity.collection, u);
 
         txfUser.setText("");
         txfPass.setText("");
@@ -131,7 +133,7 @@ public class AdminUserView extends AppCompatActivity implements OnSuccessListene
                             u.setMiddle_name(String.valueOf(txfMname.getText()));
                             u.setLast_name(String.valueOf(txfLname.getText()));
                             u.setEmail(String.valueOf(txfEmail.getText()));
-                            fs.update(collection, id, u);
+                            fs.update(DocumentSelectActivity.collection, id, u);
 
                             txfUser.setKeyListener(null);
                             txfPass.setKeyListener(null);
@@ -170,8 +172,9 @@ public class AdminUserView extends AppCompatActivity implements OnSuccessListene
                     @Override
                     public void onClick(DialogInterface dialog, int which)
                     {
-                        fs.delete(collection, id);
+                        fs.delete(DocumentSelectActivity.collection, id);
                         goBack();
+                        //finish();
                     }
 
                 })
@@ -217,7 +220,8 @@ public class AdminUserView extends AppCompatActivity implements OnSuccessListene
     public void goBack()
     {
         Intent toReturn = new Intent(this, DocumentSelectActivity.class);
-        toReturn.putExtra("collection", User.COLLECTION_NAME);
+        //toReturn.putExtra("collection", User.COLLECTION_NAME);
+        id = null;
         startActivity(toReturn);
         finish();
     }

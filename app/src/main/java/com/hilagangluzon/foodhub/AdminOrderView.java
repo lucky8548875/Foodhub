@@ -20,9 +20,9 @@ public class AdminOrderView extends AppCompatActivity {
     FirebaseFirestore db;
     FirestoreTools fs;
 
-    Bundle fromPrev;
-    String collection;
-    String id;
+    //Bundle fromPrev;
+    //String collection;
+    static String id;
 
     TextView lblBy, lblOn;
 
@@ -37,9 +37,12 @@ public class AdminOrderView extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         fs = new FirestoreTools(db);
 
-        fromPrev = getIntent().getExtras();
-        collection = fromPrev.containsKey("collection") ? fromPrev.getString("collection") : "orders";
-        id = fromPrev.containsKey("id") ? fromPrev.getString("id") : "nvm";
+        //fromPrev = fromPrev != null ? getIntent().getExtras() : new Bundle();
+        //collection = fromPrev.containsKey("collection") ? fromPrev.getString("collection") : "orders";
+        //id = getIntent().getExtras().containsKey("id") ? getIntent().getExtras().getString("id") : "nvm";
+
+        //Log.d("bundle", fromPrev.toString());
+        Log.d("id", id);
 
         lblBy = findViewById(R.id.lblBy);
         lblOn = findViewById(R.id.lblOn);
@@ -48,7 +51,8 @@ public class AdminOrderView extends AppCompatActivity {
         adpDetails = new HashMapAdapter(this, android.R.layout.simple_list_item_1);
         lstDetails.setAdapter(adpDetails);
 
-        fs.select(collection, id).addOnSuccessListener(
+        //Log.d("idis", id);
+        fs.select(DocumentSelectActivity.collection, id).addOnSuccessListener(
                 new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -83,7 +87,8 @@ public class AdminOrderView extends AppCompatActivity {
     private void goBack()
     {
         Intent toReturn = new Intent(this, DocumentSelectActivity.class);
-        toReturn.putExtra("collection", Order.COLLECTION_NAME);
+        //toReturn.putExtra("collection", Order.COLLECTION_NAME);
+        id = null;
         startActivity(toReturn);
         finish();
     }

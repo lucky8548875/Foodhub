@@ -37,8 +37,8 @@ public class DocumentSelectActivity extends AppCompatActivity implements OnCompl
     FirebaseFirestore db;
     FirestoreTools fs;
 
-    Bundle fromPrev;
-    String collection;
+    //Bundle fromPrev;
+    static String collection;
     Class c;
 
     TextView lblColls;
@@ -62,8 +62,8 @@ public class DocumentSelectActivity extends AppCompatActivity implements OnCompl
         db = FirebaseFirestore.getInstance();
         fs = new FirestoreTools(db);
 
-        fromPrev = getIntent().getExtras();
-        collection = fromPrev.getString("collection");
+        //fromPrev = getIntent().getExtras();
+        //collection = fromPrev.getString("collection");
         //Toast.makeText(this, collection, Toast.LENGTH_LONG).show();
         switch(collection)
         {
@@ -201,30 +201,35 @@ public class DocumentSelectActivity extends AppCompatActivity implements OnCompl
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         Intent toSomewhere;
-        Bundle stuff = new Bundle();
+        //Bundle stuff = new Bundle();
         switch(collection)
         {
             case User.COLLECTION_NAME:
                 toSomewhere = new Intent(this, AdminUserView.class);
-                stuff.putString("collection", collection);
-                stuff.putString("id", view.findViewById(android.R.id.text1).getTag()+"");
+                //stuff.putString("collection", collection);
+                //stuff.putString("id", view.findViewById(android.R.id.text1).getTag()+"");
+                AdminUserView.id = view.findViewById(android.R.id.text1).getTag()+"";
                 break;
             case Product.COLLECTION_NAME:
                 toSomewhere = new Intent(this, AdminProductView.class);
-                stuff.putString("collection", collection);
-                stuff.putString("id", view.findViewById(android.R.id.text1).getTag()+"");
+                //stuff.putString("collection", collection);
+                //stuff.putString("id", view.findViewById(android.R.id.text1).getTag()+"");
+                AdminProductView.id = view.findViewById(android.R.id.text1).getTag()+"";
                 break;
             case Order.COLLECTION_NAME:
                 toSomewhere = new Intent(this, AdminOrderView.class);
-                stuff.putString("collection", collection);
-                stuff.putString("id", view.findViewById(android.R.id.text1).getTag()+"");
+                //stuff.putString("collection", collection);
+                //Log.d("idis0", view.findViewById(android.R.id.text1).getTag()+"");
+                //stuff.putString("id", view.findViewById(android.R.id.text1).getTag()+"");
                 //stuff.putString("username",((Order) adpDocs.getItem(i)).getUsername()); //EXP
                 //Log.d("username", ((Order) adpDocs.getItem(i)).getUsername());
+                AdminOrderView.id = view.findViewById(android.R.id.text1).getTag()+"";
                 break;
             //case Message.COLLECTION_NAME: toAdminMessageView(); break;
             default: return;
         }
-        toSomewhere.putExtras(stuff);
+        //toSomewhere.putExtras(stuff);
+        //toSomewhere.putExtra("id", view.findViewById(android.R.id.text1).getTag()+"");
         startActivity(toSomewhere);
         finish();
     }
@@ -262,22 +267,22 @@ public class DocumentSelectActivity extends AppCompatActivity implements OnCompl
     public void add(View v)
     {
         Intent toSomewhere;
-        Bundle stuff = new Bundle();
+        //Bundle stuff = new Bundle();
         switch(collection)
         {
             case User.COLLECTION_NAME:
                 toSomewhere = new Intent(this, AdminUserView.class);
-                stuff.putString("collection", collection);
+                //stuff.putString("collection", collection);
                 break;
             case Product.COLLECTION_NAME:
                 toSomewhere = new Intent(this, AdminProductView.class);
-                stuff.putString("collection", collection);
+                //stuff.putString("collection", collection);
                 break;
             //case Order.COLLECTION_NAME: toAdminOrderView(); break;
             //case Message.COLLECTION_NAME: toAdminMessageView(); break;
             default: return;
         }
-        toSomewhere.putExtras(stuff);
+        //toSomewhere.putExtras(stuff);
         startActivity(toSomewhere);
         finish();
     }
@@ -298,5 +303,12 @@ public class DocumentSelectActivity extends AppCompatActivity implements OnCompl
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
 
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        collection = null;
+        finish();
     }
 }

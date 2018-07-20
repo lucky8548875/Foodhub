@@ -3,9 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Foodhub.iml" filepath="$PROJECT_DIR$/Foodhub.iml" />
-      <module fileurl="file://D:\BIT32\Foodhub\Foodhub\Foodhub\Foodhub.iml" filepath="D:\BIT32\Foodhub\Foodhub\Foodhub\Foodhub.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://D:\BIT32\Foodhub\Foodhub\Foodhub\app\app.iml" filepath="D:\BIT32\Foodhub\Foodhub\Foodhub\app\app.iml" />
     </modules>
   </component>
 </project>

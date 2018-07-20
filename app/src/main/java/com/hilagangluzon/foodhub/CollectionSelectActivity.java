@@ -15,11 +15,12 @@ import java.util.List;
 
 public class CollectionSelectActivity extends AppCompatActivity implements AdapterView.OnItemClickListener
 {
+    static User loggedInUser;
+
     FirebaseFirestore db;
     FirestoreTools fs;
 
-    Bundle fromPrev;
-    String logged_in_user;
+    //Bundle fromPrev;
 
     TextView lblTitle;
     ListView lstColls;
@@ -34,10 +35,11 @@ public class CollectionSelectActivity extends AppCompatActivity implements Adapt
         db = FirebaseFirestore.getInstance();
         fs = new FirestoreTools(db);
 
-        fromPrev = getIntent().getExtras();
+        //fromPrev = getIntent().getExtras();
         //logged_in_user = fromPrev.containsKey("logged_in_user") ? fromPrev.getString("logged_in_user") : "who?";
 
         lblTitle = findViewById(R.id.lblTitle);
+        lblTitle.setText("Welcome, admin " + loggedInUser.getUsername() + "!");
 
         lstColls = findViewById(R.id.lstColls);
         collections = new String[]
@@ -58,19 +60,21 @@ public class CollectionSelectActivity extends AppCompatActivity implements Adapt
         Intent toNext = new Intent(this, DocumentSelectActivity.class);
         switch(position)
         {
-            case 0: toNext.putExtra("collection", User.COLLECTION_NAME); break;
-            case 1: toNext.putExtra("collection", Product.COLLECTION_NAME); break;
-            case 2: toNext.putExtra("collection", Order.COLLECTION_NAME); break;
+            case 0: /*toNext.putExtra("collection", User.COLLECTION_NAME);*/ DocumentSelectActivity.collection = User.COLLECTION_NAME; break;
+            case 1: /*toNext.putExtra("collection", Product.COLLECTION_NAME);*/ DocumentSelectActivity.collection = Product.COLLECTION_NAME; break;
+            case 2: /*toNext.putExtra("collection", Order.COLLECTION_NAME);*/ DocumentSelectActivity.collection = Order.COLLECTION_NAME; break;
             //case 3: toNext.putExtra("collection", Message.COLLECTION_NAME); break;
             default: break;
         }
         startActivity(toNext);
     }
 
-    @Override
-    public void onBackPressed()
+    public void signOut(View v)
     {
         Intent toReturn = new Intent(this, LoginActivity.class);
+        CollectionSelectActivity.loggedInUser = null;
         startActivity(toReturn);
+        finish();
     }
+
 }

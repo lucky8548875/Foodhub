@@ -35,7 +35,7 @@ public class LoginActivity extends AppCompatActivity implements OnSuccessListene
 
     public void signIn(View v)
     {
-        fs.select("users", "username", "=", txfUser.getText().toString()).addOnSuccessListener(this);
+        fs.select(User.COLLECTION_NAME, "username", "=", txfUser.getText().toString()).addOnSuccessListener(this);
     }
 
     public void goToSignUp(View v)
@@ -62,12 +62,16 @@ public class LoginActivity extends AppCompatActivity implements OnSuccessListene
                 if(document.getBoolean("is_admin"))
                 {
                     toMain = new Intent(this, CollectionSelectActivity.class);
+                    CollectionSelectActivity.loggedInUser = document.toObject(User.class);
                     //stuff.putString("logged_in_user", document.getId());
+                    finish();
                 }
                 else
                 {
-                    toMain = new Intent(this, MainActivity.class);
-                    stuff.putString("logged_in_user", document.getId());
+                    toMain = new Intent(this, MainActivity.class); //this activity to should come from Main then to Dashboard
+                    //Dashboard.loggedInUser = document.toObject(User.class);
+                    //stuff.putString("logged_in_user", document.getId());
+                    finish();
                 }
                 toMain.putExtras(stuff);
                 startActivity(toMain);
