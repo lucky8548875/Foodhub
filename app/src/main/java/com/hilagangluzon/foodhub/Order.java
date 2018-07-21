@@ -10,6 +10,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.IgnoreExtraProperties;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @IgnoreExtraProperties
@@ -20,7 +21,6 @@ public class Order extends Object
     private String username;
     private Date order_date;
     private String status;
-
 
     //public static final String FIELD_ = "";
     public static final String COLLECTION_NAME = "orders";
@@ -42,7 +42,8 @@ public class Order extends Object
     @Override
     public String toString()
     {
-        return getUsername() + "\n" + getOrder_date();
+        SimpleDateFormat formattter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        return getUsername() + "\n" + formattter.format(getOrder_date());
     }
 
     /*public String getId() {

@@ -35,7 +35,7 @@ public class LoginActivity extends AppCompatActivity implements OnSuccessListene
 
     public void signIn(View v)
     {
-        fs.select(User.COLLECTION_NAME, "username", "=", txfUser.getText().toString()).addOnSuccessListener(this);
+        fs.selectWhere(User.COLLECTION_NAME, "username", "=", txfUser.getText().toString()).addOnSuccessListener(this);
     }
 
     public void goToSignUp(View v)

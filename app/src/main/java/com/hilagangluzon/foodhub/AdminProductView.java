@@ -200,7 +200,7 @@ public class AdminProductView extends AppCompatActivity implements OnSuccessList
     public void onSuccess(DocumentSnapshot documentSnapshot) {
         txfName.setText(documentSnapshot.get("name").toString());
         txfDesc.setText(String.valueOf(documentSnapshot.get("description")));
-        txfPrice.setText(String.valueOf(documentSnapshot.get("price")));
+        txfPrice.setText(String.format("%.2f", documentSnapshot.get("price")));
         txfInst.setText(String.valueOf(documentSnapshot.get("in_stock")));
         spnCateg.setSelection(adpCateg.getPosition(documentSnapshot.get("category")));
     }

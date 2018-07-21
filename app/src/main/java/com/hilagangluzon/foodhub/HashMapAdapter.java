@@ -2,7 +2,6 @@ package com.hilagangluzon.foodhub;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 public class HashMapAdapter extends BaseAdapter
 {
@@ -19,6 +17,12 @@ public class HashMapAdapter extends BaseAdapter
     private int resource;
     private HashMap<String, Object> map;
     private ArrayList<String> keys;
+
+    public HashMapAdapter()
+    {
+        this.map = new HashMap<>();
+        this.keys = new ArrayList<>();
+    }
 
     public HashMapAdapter(Context context, int resource)
     {
@@ -33,17 +37,18 @@ public class HashMapAdapter extends BaseAdapter
         this.context = context;
         this.resource = resource;
         this.map = map;
-        keys.addAll(map.keySet());
+        this.keys = new ArrayList<>();
+        this.keys.addAll(map.keySet());
     }
 
     @Override
     public int getCount() {
-        return map.size();
+        return getMap().size();
     }
 
     @Override
     public Object getItem(int i) {
-        return map.get(keys.get(i));
+        return getMap().get(keys.get(i));
     }
 
     @Override
@@ -82,36 +87,47 @@ public class HashMapAdapter extends BaseAdapter
     public void add(String key, Object value)
     {
         //this.keys.add(key);
-        this.map.put(key, value);
+        this.getMap().put(key, value);
         this.keys.clear();
         //this.keys = new ArrayList<>();
-        this.keys.addAll(map.keySet());
+        this.keys.addAll(getMap().keySet());
     }
 
     public void set(String key, Object value)
     {
-        if(map.containsKey(key))
+        if(getMap().containsKey(key))
         {
             //this.keys.add(key);
-            this.map.put(key, value);
+            this.getMap().put(key, value);
             this.keys.clear();
             //this.keys = new ArrayList<>();
-            this.keys.addAll(map.keySet());
+            this.keys.addAll(getMap().keySet());
         }
     }
 
     public void remove(String key)
     {
         //this.keys.remove(key);
-        this.map.remove(key);
+        this.getMap().remove(key);
         this.keys.clear();
         //this.keys = new ArrayList<>();
-        this.keys.addAll(map.keySet());
+        this.keys.addAll(getMap().keySet());
     }
 
     public void clear()
     {
         this.map.clear();
         this.keys.clear();
+    }
+
+    public HashMap<String, Object> getMap() {
+        return map;
+    }
+
+    public void changeDataSet(HashMap<String, Object> map) {
+        clear();
+        this.map = map;
+        this.keys.addAll(map.keySet());
+        notifyDataSetChanged();
     }
 }

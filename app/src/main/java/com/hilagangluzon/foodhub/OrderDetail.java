@@ -2,6 +2,8 @@ package com.hilagangluzon.foodhub;
 
 import java.util.Date;
 
+import javax.xml.transform.sax.SAXResult;
+
 public class OrderDetail extends Object
 {
     private String order_id;
@@ -16,10 +18,15 @@ public class OrderDetail extends Object
 
     }
 
+    public double pickSubtotal()
+    {
+        return getPrice()*getQuantity();
+    }
+
     @Override
     public String toString()
     {
-        return getName() + ": " + getPrice() + " x " + getQuantity() + " = " + getPrice()*getQuantity();
+        return getName() + ": " + String.format("%.2f", getPrice()) + " x " + getQuantity() + " = " + String.format("%.2f", pickSubtotal());
     }
 
     public String getOrder_id() {

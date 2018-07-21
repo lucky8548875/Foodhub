@@ -73,10 +73,15 @@ public class Product extends Object
         this.id = id;
     }*/
 
+    public double pickSubtotal()
+    {
+        return this.price*this.units_sold;
+    }
+
     @Override
     public String toString()
     {
-        return this.name + "\n" + this.price;
+        return this.name + "\n" + String.format("%.2f", this.price);
     }
 
     public String getCategory() {

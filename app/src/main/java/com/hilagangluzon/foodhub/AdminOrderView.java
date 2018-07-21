@@ -15,6 +15,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.SimpleDateFormat;
+import java.util.Map;
+
 public class AdminOrderView extends AppCompatActivity {
 
     FirebaseFirestore db;
@@ -24,7 +27,7 @@ public class AdminOrderView extends AppCompatActivity {
     //String collection;
     static String id;
 
-    TextView lblBy, lblOn;
+    TextView lblBy, lblOn, lblTotal;
 
     ListView lstDetails;
     HashMapAdapter adpDetails;
@@ -46,6 +49,7 @@ public class AdminOrderView extends AppCompatActivity {
 
         lblBy = findViewById(R.id.lblBy);
         lblOn = findViewById(R.id.lblOn);
+        lblTotal = findViewById(R.id.lblTotal);
 
         lstDetails = findViewById(R.id.lstDetails);
         adpDetails = new HashMapAdapter(this, android.R.layout.simple_list_item_1);
@@ -56,23 +60,27 @@ public class AdminOrderView extends AppCompatActivity {
                 new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        SimpleDateFormat formattter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
                         lblBy.setText("Ordered by: @" + documentSnapshot.get("username").toString());
-                        lblOn.setText("Ordered on: " + documentSnapshot.get("order_date").toString());
+                        lblOn.setText("Ordered on: " + formattter.format(documentSnapshot.getDate("order_date")));
                     }
                 }
         );
 
-        fs.select("order_details", "order_id", "=", id).addOnSuccessListener(
+        fs.selectWhere("order_details", "order_id", "=", id).addOnSuccessListener(
                 new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot snapshots) {
+                        double total = 0;
                         for(DocumentSnapshot document : snapshots)
                         {
-                            Log.d("tester", document.getId() + " " + document.toObject(OrderDetail.class).toString());
+                            //Log.d("tester", document.getId() + " " + document.toObject(OrderDetail.class).toString());
                             adpDetails.add(document.getId(), document.toObject(OrderDetail.class));
+                            total += document.getDouble("price")*Integer.valueOf(document.get("quantity").toString());
                         }
 
                         adpDetails.notifyDataSetChanged();
+                        lblTotal.setText("Total: " + String.format("%.2f", total));
                     }
                 }
         );

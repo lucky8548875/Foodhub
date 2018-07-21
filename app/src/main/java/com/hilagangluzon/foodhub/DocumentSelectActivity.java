@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
@@ -30,8 +31,7 @@ import java.util.ArrayList;
 import java.util.EventListener;
 import java.util.HashMap;
 
-public class DocumentSelectActivity extends AppCompatActivity implements OnCompleteListener<QuerySnapshot>
-        /*com.google.firebase.firestore.EventListener<QuerySnapshot>*/, AdapterView.OnItemClickListener, AdapterView.OnItemSelectedListener
+public class DocumentSelectActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemSelectedListener
 {
 
     FirebaseFirestore db;
@@ -62,6 +62,8 @@ public class DocumentSelectActivity extends AppCompatActivity implements OnCompl
         db = FirebaseFirestore.getInstance();
         fs = new FirestoreTools(db);
 
+
+        //adpDocs = new HashMapAdapter();
         //fromPrev = getIntent().getExtras();
         //collection = fromPrev.getString("collection");
         //Toast.makeText(this, collection, Toast.LENGTH_LONG).show();
@@ -71,7 +73,8 @@ public class DocumentSelectActivity extends AppCompatActivity implements OnCompl
             case Product.COLLECTION_NAME: c = Product.class; break;
             case Order.COLLECTION_NAME: c = Order.class ; break;
             //case Message.COLLECTION_NAME: c = Message.class ; break;
-            default: c = Object.class; return;
+            case "SUMMARY OF SALES": break;
+            default: finish(); return;
         }
 
         /*User u = new User();
@@ -98,41 +101,100 @@ public class DocumentSelectActivity extends AppCompatActivity implements OnCompl
                     }
                 }
         );*/
+        //Log.d("Mycoll", "Hello " + collection);
 
         lblColls = findViewById(R.id.lblColls);
         lblColls.setText(collection.toUpperCase());
 
-        spnCateg = findViewById(R.id.spnCateg);
+        lstDocs = findViewById(R.id.lstDocs);
+        if(collection.equals("SUMMARY OF SALES"))
+        {
+            fs.selectAll("products").addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                @Override
+                public void onSuccess(QuerySnapshot snapshots) {
+                    HashMap<String, Product> prods = new HashMap<>();
+                    for(DocumentSnapshot docu: snapshots)
+                    {
+                        prods.put(docu.getId(), docu.toObject(Product.class));
+                    }
 
+                    SalesInfoAdapter adpSales = new SalesInfoAdapter(DocumentSelectActivity.this, prods);
+                    lstDocs.setAdapter(adpSales);
+                }
+            });
+        }
+        else if (collection.equals("orders"))
+        {
+            fs.selectAllOrderBy(collection, "order_date").addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    HashMap<String, Object> map = new HashMap<>();
+                    for(DocumentSnapshot document: task.getResult())
+                    {
+                        //Log.d("find me", document.getId()+":"+document.toObject(c));
+                        map.put(document.getId(), document.toObject(c));
+                    }
+
+                    //adpDocs = new HashMapAdapter(this, android.R.layout.simple_list_item_1, records);
+                    //lstDocs.setAdapter(adpDocs);
+
+                    //debug
+                    //Toast.makeText(this, "Something happened!", Toast.LENGTH_LONG).show();
+                    adpDocs = new HashMapAdapter(DocumentSelectActivity.this, android.R.layout.simple_list_item_1, map);
+                    lstDocs.setAdapter(adpDocs);
+                }
+            });
+            lstDocs.setOnItemClickListener(this);
+        }
+        else
+        {
+            fs.selectAll(collection).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    HashMap<String, Object> map = new HashMap<>();
+                    for(DocumentSnapshot document: task.getResult())
+                    {
+                        //Log.d("find me", document.getId()+":"+document.toObject(c));
+                        map.put(document.getId(), document.toObject(c));
+                    }
+
+                    //adpDocs = new HashMapAdapter(this, android.R.layout.simple_list_item_1, records);
+                    //lstDocs.setAdapter(adpDocs);
+
+                    //debug
+                    //Toast.makeText(this, "Something happened!", Toast.LENGTH_LONG).show();
+                    adpDocs = new HashMapAdapter(DocumentSelectActivity.this, android.R.layout.simple_list_item_1, map);
+                    lstDocs.setAdapter(adpDocs);
+                }
+            });
+            lstDocs.setOnItemClickListener(this);
+        }
+
+        fabAdd = findViewById(R.id.fabAdd);
+        if (collection.equals("orders") || collection.equals("SUMMARY OF SALES"))
+        {
+            fabAdd.setVisibility(View.GONE);
+        }
+
+        spnCateg = findViewById(R.id.spnCateg);
         if(collection.equals("products"))
         {
-
             categories = new String[]
                     {
                             "All", "Frappe", "Hot Coffee", "Cold Drink", "Sandwich", "Bottled Drink", "Etc"
                     };
             adpCateg = new ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, categories);
             spnCateg.setAdapter(adpCateg);
+            Log.d("Soitbegins", "Hiii");
             spnCateg.setOnItemSelectedListener(this);
+            Log.d("Soitends", "Byeeeee");
         }
         else
         {
             spnCateg.setVisibility(View.GONE);
         }
 
-        lstDocs = findViewById(R.id.lstDocs);
-        adpDocs = new HashMapAdapter(this, android.R.layout.simple_list_item_1);
-        lstDocs.setAdapter(adpDocs);
-        lstDocs.setOnItemClickListener(this);
-
-        fabAdd = findViewById(R.id.fabAdd);
-
-        if(collection.equals("orders"))
-        {
-            fabAdd.setVisibility(View.GONE);
-        }
-
-        fs.selectAll(collection).addOnCompleteListener(this);
+        //fs.selectAll(collection).addOnCompleteListener(this);
         //fs.referToCollection(collection).addSnapshotListener(this);
     }
 
@@ -178,25 +240,6 @@ public class DocumentSelectActivity extends AppCompatActivity implements OnCompl
 
         adpDocs.notifyDataSetChanged();
     }*/
-
-    @Override
-    public void onComplete(@NonNull Task<QuerySnapshot> task)
-    {
-
-        for(DocumentSnapshot document: task.getResult())
-        {
-            //Log.d("find me", document.getId()+":"+document.toObject(c));
-            adpDocs.add(document.getId(), document.toObject(c));
-        }
-
-        //adpDocs = new HashMapAdapter(this, android.R.layout.simple_list_item_1, records);
-        //lstDocs.setAdapter(adpDocs);
-
-        //debug
-        //Toast.makeText(this, "Something happened!", Toast.LENGTH_LONG).show();
-
-        adpDocs.notifyDataSetChanged();
-    }
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -289,15 +332,38 @@ public class DocumentSelectActivity extends AppCompatActivity implements OnCompl
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        adpDocs.clear();
+        //adpDocs.clear();
         if(i == 0)
         {
-            fs.selectAll(collection).addOnCompleteListener(this);
+            fs.selectAll(collection).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    HashMap<String, Object> map = new HashMap<>();
+                    for(DocumentSnapshot document: task.getResult())
+                    {
+                        //Log.d("find me", document.getId()+":"+document.toObject(c));
+                        map.put(document.getId(), document.toObject(c));
+                    }
+                    adpDocs.changeDataSet(map);
+                }
+            });
         }
         else
         {
-            fs.select(collection, "category", "=", categories[i]).addOnCompleteListener(this);
+            fs.selectWhere(collection, "category", "=", categories[i]).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    HashMap<String, Object> map = new HashMap<>();
+                    for(DocumentSnapshot document: task.getResult())
+                    {
+                        //Log.d("find me", document.getId()+":"+document.toObject(c));
+                        map.put(document.getId(), document.toObject(c));
+                    }
+                    adpDocs.changeDataSet(map);
+                }
+            });
         }
+        //adpDocs.notifyDataSetChanged();
     }
 
     @Override

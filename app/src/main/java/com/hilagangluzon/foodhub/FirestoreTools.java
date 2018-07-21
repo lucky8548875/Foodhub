@@ -38,7 +38,7 @@ public class FirestoreTools
         return db.collection(from).document(key).get();
     }
 
-    public Task<QuerySnapshot> select(String from, String where, String operator, String value)
+    public Task<QuerySnapshot> selectWhere(String from, String where, String operator, String value)
     {
         Query task = db.collection(from);
         switch(operator)
@@ -48,6 +48,11 @@ public class FirestoreTools
                 break;
         }
         return task.get();
+    }
+
+    public Task<QuerySnapshot> selectAllOrderBy(String from, String orderBy)
+    {
+        return db.collection(from).orderBy(orderBy).get();
     }
 
     /*public Task<DocumentSnapshot> select(DocumentReference docRef)
