@@ -81,6 +81,9 @@ public class UserProductView extends AppCompatActivity {
                 {
                     CartActivity.orderDetails.add(od);
                 }
+
+                Toast.makeText(this, "Added " + od.getQuantity() + " serving/s of " + od.getName() + " to your cart.", Toast.LENGTH_LONG).show();
+                finish();
             }
             else
             {

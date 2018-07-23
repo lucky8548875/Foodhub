@@ -113,7 +113,34 @@ public class MenuFragment extends Fragment implements View.OnClickListener, Adap
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
+        if(i == 0)
+        {
+            db.collection("products").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    HashMap<String, Product> map = new HashMap<>();
+                    for(DocumentSnapshot document: task.getResult())
+                    {
+                        //Log.d("find me", document.getId()+":"+document.toObject(c));
+                        map.put(document.getId(), document.toObject(Product.class));
+                    }
+                    adpList.changeDataSet(map);
+                }
+            });
+        }
+        else {
+            db.collection("products").whereEqualTo("category", categories[i]).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    HashMap<String, Product> map = new HashMap<>();
+                    for (DocumentSnapshot document : task.getResult()) {
+                        //Log.d("find me", document.getId()+":"+document.toObject(c));
+                        map.put(document.getId(), document.toObject(Product.class));
+                    }
+                    adpList.changeDataSet(map);
+                }
+            });
+        }
     }
 
     @Override

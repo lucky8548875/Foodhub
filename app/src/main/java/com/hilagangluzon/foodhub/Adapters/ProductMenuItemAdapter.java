@@ -85,6 +85,18 @@ public class ProductMenuItemAdapter extends BaseAdapter {
 
     }
 
+    public void clear()
+    {
+        this.productList.clear();
+        this.keys.clear();
+    }
 
+    public void changeDataSet(HashMap<String, Product> newDataSet)
+    {
+        clear();
+        this.productList = newDataSet;
+        this.keys.addAll(newDataSet.keySet());
+        notifyDataSetChanged();
+    }
 
 }

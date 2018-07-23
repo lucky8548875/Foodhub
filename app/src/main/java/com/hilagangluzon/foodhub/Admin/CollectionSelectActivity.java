@@ -51,8 +51,8 @@ public class CollectionSelectActivity extends AppCompatActivity implements Adapt
                         User.COLLECTION_NAME.toUpperCase(),
                         Product.COLLECTION_NAME.toUpperCase(),
                         Order.COLLECTION_NAME.toUpperCase(),
-                        "placeholder text",//Message.COLLECTION_NAME.toUpperCase()
                         "SUMMARY OF SALES"
+                        //Message.COLLECTION_NAME.toUpperCase()
                 };
         adpColls = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, collections);
         lstColls.setAdapter(adpColls);
@@ -68,8 +68,8 @@ public class CollectionSelectActivity extends AppCompatActivity implements Adapt
             case 0: /*toNext.putExtra("collection", User.COLLECTION_NAME);*/ DocumentSelectActivity.collection = User.COLLECTION_NAME; break;
             case 1: /*toNext.putExtra("collection", Product.COLLECTION_NAME);*/ DocumentSelectActivity.collection = Product.COLLECTION_NAME; break;
             case 2: /*toNext.putExtra("collection", Order.COLLECTION_NAME);*/ DocumentSelectActivity.collection = Order.COLLECTION_NAME; break;
-            //case 3: toNext.putExtra("collection", Message.COLLECTION_NAME); break;
-            case 4: /*Log.d("myColl", "Hi " + collections[position]);*/ DocumentSelectActivity.collection = "SUMMARY OF SALES"; break;
+            case 3: /*Log.d("myColl", "Hi " + collections[position]);*/ DocumentSelectActivity.collection = "SUMMARY OF SALES"; break;
+            //case 4: toNext.putExtra("collection", Message.COLLECTION_NAME); break;
             default: return;
         }
         startActivity(toNext);
