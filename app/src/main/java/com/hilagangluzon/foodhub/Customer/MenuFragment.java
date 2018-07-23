@@ -1,10 +1,8 @@
 package com.hilagangluzon.foodhub.Customer;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -13,10 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
-import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -25,13 +20,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hilagangluzon.foodhub.Adapters.ProductMenuItemAdapter;
-import com.hilagangluzon.foodhub.CartActivity;
 import com.hilagangluzon.foodhub.Classes.Product;
-import com.hilagangluzon.foodhub.Classes.User;
-import com.hilagangluzon.foodhub.FirestoreTools;
 import com.hilagangluzon.foodhub.R;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 
@@ -62,7 +53,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener, Adap
 
         //Log.d("products", products.get(0).toString());
         listView = getActivity().findViewById(R.id.listView);
-        Log.d("dbinst", "Db instance!");
+        //Log.d("dbinst", "Db instance!");
         products = new HashMap<>();
         //adpList = new ProductMenuItemAdapter(getContext(), R.layout.product_item_layout);
         db.collection("products").get().addOnCompleteListener(
@@ -71,9 +62,9 @@ public class MenuFragment extends Fragment implements View.OnClickListener, Adap
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if(task.isSuccessful())
                         {
-                            Log.d("prog", "Inside onComplete");
+                            //Log.d("prog", "Inside onComplete");
                             for(DocumentSnapshot documentSnapshot: task.getResult()){
-                                Log.d("what?", documentSnapshot.getId() + ":" + documentSnapshot.get("name"));
+                                //Log.d("what?", documentSnapshot.getId() + ":" + documentSnapshot.get("name"));
                                 String id = documentSnapshot.getId();
                                 Product product = documentSnapshot.toObject(Product.class);
                                 products.put(id, product);
@@ -83,7 +74,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener, Adap
                         }
                         else
                         {
-                            Log.d("Bye", "byeeeeee");
+                            //Log.d("Bye", "byeeeeee");
                             getActivity().finish();
                             return;
                         }
@@ -114,7 +105,7 @@ public class MenuFragment extends Fragment implements View.OnClickListener, Adap
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        Log.d("idis", view.getTag().toString());
+        //Log.d("idis", view.getTag().toString());
         Intent toProduct = new Intent(getContext(), UserProductView.class);
         UserProductView.id = view.getTag().toString();
         startActivity(toProduct);
@@ -134,5 +125,23 @@ public class MenuFragment extends Fragment implements View.OnClickListener, Adap
     public void onClick(View view) {
         Intent toCart = new Intent(getContext(), CartActivity.class);
         startActivity(toCart);
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+
+        super.setUserVisibleHint(
+                isVisibleToUser);
+
+        // Refresh tab data:
+
+        if (getFragmentManager() != null) {
+
+            getFragmentManager()
+                    .beginTransaction()
+                    .detach(this)
+                    .attach(this)
+                    .commit();
+        }
     }
 }

@@ -45,6 +45,16 @@ public class User extends Object
 
     }
 
+    public String pickMiddleInital()
+    {
+        return getMiddle_name().charAt(0)+".";
+    }
+
+    public String pickFullname()
+    {
+        return getFirst_name() + " " + pickMiddleInital() + " " + getLast_name();
+    }
+
     @Override
     public String toString() {
         return this.username + "\n" + this.email;

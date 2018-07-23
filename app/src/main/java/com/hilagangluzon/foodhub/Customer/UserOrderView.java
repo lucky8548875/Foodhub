@@ -1,4 +1,4 @@
-package com.hilagangluzon.foodhub;
+package com.hilagangluzon.foodhub.Customer;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +12,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.hilagangluzon.foodhub.Adapters.HashMapAdapter;
 import com.hilagangluzon.foodhub.Classes.Order;
 import com.hilagangluzon.foodhub.Classes.OrderDetail;
+import com.hilagangluzon.foodhub.R;
 
 import java.util.HashMap;
 
@@ -36,7 +37,7 @@ public class UserOrderView extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
 
         lblDate = findViewById(R.id.lblDate);
-        lblDate.setText(order.getOrder_date().toString());
+        lblDate.setText("Order Date: " + order.getOrder_date().toString());
 
         lblTotal = findViewById(R.id.lblTotal);
 
@@ -56,7 +57,7 @@ public class UserOrderView extends AppCompatActivity {
                         adpDetails = new HashMapAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, ods);
                         lstDetails.setAdapter(adpDetails);
 
-                        lblTotal.setText(""+totalCost);
+                        lblTotal.setText("Total: " + totalCost);
                     }
                 }
         );

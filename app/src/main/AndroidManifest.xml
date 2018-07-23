@@ -38,8 +38,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".Customer.UserProductView" />
-        <activity android:name=".CartActivity" />
-        <activity android:name=".UserOrderView"></activity>
+        <activity android:name=".Customer.CartActivity" />
+        <activity android:name=".Customer.UserOrderView" />
+        <activity android:name=".Customer.UserUserView"></activity>
     </application>
 
 </manifest>

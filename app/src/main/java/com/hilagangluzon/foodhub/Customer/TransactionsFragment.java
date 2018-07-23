@@ -1,8 +1,6 @@
 package com.hilagangluzon.foodhub.Customer;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -14,11 +12,11 @@ import android.widget.ListView;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.hilagangluzon.foodhub.Adapters.HashMapAdapter;
 import com.hilagangluzon.foodhub.Classes.Order;
 import com.hilagangluzon.foodhub.R;
-import com.hilagangluzon.foodhub.UserOrderView;
 
 import java.util.HashMap;
 
@@ -71,5 +69,22 @@ public class TransactionsFragment extends Fragment implements AdapterView.OnItem
         UserOrderView.orderId = view.getTag().toString();
         UserOrderView.order = (Order) orders.get(view.getTag().toString());
         startActivity(toDetails);
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+
+        super.setUserVisibleHint(
+                isVisibleToUser);
+
+        // Refresh tab data:
+
+        if (getFragmentManager() != null) {
+            getFragmentManager()
+                    .beginTransaction()
+                    .detach(this)
+                    .attach(this)
+                    .commit();
+        }
     }
 }

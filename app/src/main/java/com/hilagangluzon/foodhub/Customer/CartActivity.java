@@ -1,5 +1,6 @@
-package com.hilagangluzon.foodhub;
+package com.hilagangluzon.foodhub.Customer;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,12 +11,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.hilagangluzon.foodhub.Classes.Order;
 import com.hilagangluzon.foodhub.Classes.OrderDetail;
 import com.hilagangluzon.foodhub.Customer.Dashboard;
+import com.hilagangluzon.foodhub.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -86,14 +90,32 @@ public class CartActivity extends AppCompatActivity {
 
                     db.collection("orders").document(newOrderId).set(order);
 
-                    CollectionReference colref = db.collection("order_details");
+                    final CollectionReference prodref = db.collection("products");
+                    final CollectionReference odref = db.collection("order_details");
                     for(OrderDetail od : orderDetails)
                     {
                         od.setOrder_id(newOrderId);
                         od.setOrder_date(Calendar.getInstance().getTime());
-                        colref.add(od);
+                        odref.add(od);
+
+                        final OrderDetail odNow = od;
+                        prodref.document(od.getProduct_id()).get().addOnSuccessListener(
+                                new OnSuccessListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                        int in_stock = documentSnapshot.get("in_stock") != null ? Integer.valueOf(documentSnapshot.get("in_stock").toString()) : 0;
+                                        prodref.document(odNow.getProduct_id()).update("in_stock", in_stock - odNow.getQuantity());
+
+                                        int units_sold = documentSnapshot.get("units_sold") != null ? Integer.valueOf(documentSnapshot.get("units_sold").toString()) : 0;
+                                        prodref.document(odNow.getProduct_id()).update("units_sold", units_sold + odNow.getQuantity());
+                                    }
+                                }
+                        );
+
                     }
 
+                    finish();
+                    orderDetails.clear();
                     Toast.makeText(this, "Order successful!\nYour change is " + String.format("P%.2f", cash-totalCost), Toast.LENGTH_LONG).show();
                 }
                 else

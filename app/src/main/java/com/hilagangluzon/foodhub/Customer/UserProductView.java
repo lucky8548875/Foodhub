@@ -10,13 +10,9 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.hilagangluzon.foodhub.CartActivity;
-import com.hilagangluzon.foodhub.Classes.Order;
 import com.hilagangluzon.foodhub.Classes.OrderDetail;
 import com.hilagangluzon.foodhub.Classes.Product;
 import com.hilagangluzon.foodhub.R;
-
-import java.util.Map;
 
 public class UserProductView extends AppCompatActivity {
 
@@ -85,8 +81,6 @@ public class UserProductView extends AppCompatActivity {
                 {
                     CartActivity.orderDetails.add(od);
                 }
-
-                finish();
             }
             else
             {
